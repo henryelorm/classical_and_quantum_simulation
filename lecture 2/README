@@ -1,0 +1,5 @@
+This section covers  Classical bit of the course using ASE  and LAMMPS for MD simulations.
+
+a - introduction the verlet algorithm and its basic implementation (refer to class recording and recommended books for theory)
+
+b -  md implementation in the ase python package.
