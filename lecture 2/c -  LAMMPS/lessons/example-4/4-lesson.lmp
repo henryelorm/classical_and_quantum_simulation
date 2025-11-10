@@ -1,0 +1,35 @@
+# LAMMPS input script for graphene simulation with AIREBO-M potential
+
+# Initialize simulation
+units           metal
+dimension       3
+boundary        p p p
+atom_style      atomic
+
+read_data  graphene.data
+
+# Force field
+pair_style      airebo/morse 3.0
+pair_coeff      * * CH.airebo-m C
+
+# Energy minimization
+minimize        1.0e-4 1.0e-6 100 1000
+
+# Define thermodynamic output
+thermo          100
+thermo_style    custom step temp pe ke etotal press vol
+
+# Setup time integration
+fix             1 all nve
+timestep        0.0005
+
+# Set initial velocities
+velocity        all create 300.0 12345 dist gaussian
+
+# Output settings
+dump viz all image 100 data/myimage-*.ppm element type size 600 600 zoom 2.59374 shiny 0.6 fsaa no view 110 100 box no 0.0 axes no 0.0 0.0 autobond 1.6 0.5 center s 0.5 0.5 0.5
+dump_modify viz pad 9 boxcolor yellow backcolor black element C adiam 1 0.85
+
+
+# Run simulation
+run             10000

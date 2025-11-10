@@ -1,0 +1,20 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "lmps",
+      "label": "LAMMPS Run",
+      "binary": "lmp",
+      "mpiexec_path": "mpiexec",
+      "mpi_tasks": 4,
+      "gpu_nodes": 0,
+      "omp_threads": 0,
+      "args": "",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ]
+}

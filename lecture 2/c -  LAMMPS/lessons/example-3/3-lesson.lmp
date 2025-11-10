@@ -1,0 +1,31 @@
+# 1. Initialization
+
+# --------------------------------------------------
+units lj                                             #  lk - reduced units
+dimension     3                                 # simulation is conducted in 3D (another example is 2D)
+atom_style  atomic                          # designates the atomic style for representing simple particles
+boundary     p p p                             # boundary conditions for x, y,  and z. p =periodic, f =is non-periodic and fixed, s is non-periodic and shrink-wrapped, m is non-periodic and shrink-wrapped with a minimum value
+
+
+
+# 2. System definition
+# -------------------------------------------------
+pair_style lj/cut 4.0
+read_data  sample_region.data
+
+
+# 4. Monitoring
+#--------------------------------
+thermo 1000
+thermo_style custom step temp  pe ke etotal 
+
+dump viz all image 100 data/myimage-*.ppm type type size 600 600 zoom 1.331 shiny 0.6 fsaa no view 60 30 box yes 0.025 axes no 0.0 0.0 center s 0.5 0.5 0.5
+dump_modify viz pad 9 boxcolor yellow backcolor black adiam 1 1.6 adiam 2 4.8
+
+
+# 5. Run
+#-----------------------------------
+fix somenve all nve    # nve simulation, where fix means updating all positions and velocities
+fix somelgv all langevin 1.0 1.0 0.1  13430
+timestep 0.005
+run 105000

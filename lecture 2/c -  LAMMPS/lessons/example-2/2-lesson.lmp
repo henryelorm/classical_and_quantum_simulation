@@ -1,0 +1,57 @@
+# 1. Initialization
+
+# --------------------------------------------------
+units lj                                             #  lk - reduced units
+dimension     3                                 # simulation is conducted in 3D (another example is 2D)
+atom_style  atomic                          # designates the atomic style for representing simple particles
+boundary     p p p                             # boundary conditions for x, y,  and z. p =periodic, f =is non-periodic and fixed, s is non-periodic and shrink-wrapped, m is non-periodic and shrink-wrapped with a minimum value
+
+
+
+# 2. System definition
+# -------------------------------------------------
+region box1 block -30 30   -30  30  -30 30    # creating a cubic/rectangular box from -30 to 30 units in all 3 spatial directions
+create_box 2  box1                                 # Initializes a simulation box based on the region box1 and reserves space for two types of particles.
+
+region cyl_in  sphere 0.0 0.0 0.0 5 side in
+region cyl_out sphere 0.0 0.0 0.0 5 side out
+
+create_atoms 1 random 1000 34133 cyl_out
+create_atoms 2 random 200 38477 cyl_in
+
+
+# 3. Settings
+#--------------------------------------------
+mass 1 1.0                                # mass of particle 1, to be 1.0
+mass 2 9.0
+pair_style lj/cut 4.0                 # specifies that the atoms will interact using lennard-Jones potentials
+pair_coeff 1 1 1.0 1.0                # interacting with self (type 1)  depth of potential 0.1, distance is 1.0
+pair_coeff 2 2 0.6 3.0
+#pair_coeff 1 2 
+
+# 4. Monitoring
+#--------------------------------------------
+thermo 10
+thermo_style custom step etotal ke pe 
+
+# 5. Run
+#-----------------------------------
+minimize 1.0e-6 1.0e-6 1000 100000
+
+write_data sample_region.data 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
