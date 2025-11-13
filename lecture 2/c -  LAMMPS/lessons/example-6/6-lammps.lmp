@@ -1,0 +1,73 @@
+# 1. Initialization
+#--------------------------
+units           metal
+dimension       3
+boundary      p p p
+atom_style     full 
+
+
+# 2. Atom Definition
+#--------------------------
+region box block -18.0 18.0 -9.0 9.0 -9.0 9.0
+create_box 2 box
+labelmap atom 1 Si 2 O
+mass Si 28.0855
+mass O 15.9994
+create_atoms Si random 240 5802 box overlap 2.0 maxtry 500
+create_atoms O random 480 1072 box overlap 2.0 maxtry 500
+
+# 3. Force Field Definition
+#-----------------------------------------
+pair_style vashishta
+neighbor 1.0 bin
+neigh_modify delay 1
+pair_coeff * * SiO.1990.vashishta Si O
+
+# 4. Monitoring and Output
+#--------------------------------------------
+dump viz all image 210 data/image-*.ppm type type shiny 0.1 box no 0.01 view 180 90 zoom 3.4 size 1700 700
+dump_modify viz backcolor white acolor Si yellow adiam Si 2.5 acolor O red adiam O 2
+
+thermo 210
+thermo_style custom step temp etotal vol density
+
+# 5. Run Parameters
+#----------------------------------------
+# now melting the SiO material at 6000 K
+velocity all create 6000 8289 rot yes dist gaussian   
+fix mynvt all nvt temp 6000 6000 0.6
+timestep 0.001
+run 10000
+
+# now we cool from 6000 K to  300 K
+fix mynvt all nvt temp 6000 300 0.6
+run 30000
+
+
+# using an anisotropic pressure coupling
+unfix mynvt
+fix mynpt all npt temp 300 300 0.1 aniso 1 1 1
+run 10000
+
+write_data generate.data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

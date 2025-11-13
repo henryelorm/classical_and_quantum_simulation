@@ -1,0 +1,38 @@
+# 1. Initialization
+#---------------------------
+units metal
+boundary p p p
+atom_style full
+
+# 2. System definition
+#---------------------------
+read_data generate.data
+
+# 3. Settings
+#---------------------------
+pair_style vashishta
+neighbor 1.0 bin
+neigh_modify delay 1
+
+pair_coeff * * SiO.1990.vashishta Si O
+
+# 4. Monitor
+#------------------
+
+dump viz all image 250 data/crakingimage-*.ppm type type shiny 0.1 box no 0.01 view 180 90 zoom 3.4 size 1700 700
+dump_modify viz backcolor white acolor Si yellow adiam Si 2.5 acolor O red adiam O 2
+
+thermo 250
+thermo_style custom step temp etotal vol density
+
+
+# 5. Run
+#---------------
+timestep 0.001
+fix nvt1 all nvt temp 300 300 0.1
+fix mydef all deform 1 x erate 0.005
+run 50000
+
+# Output
+#---------------------
+write_data cracking.data

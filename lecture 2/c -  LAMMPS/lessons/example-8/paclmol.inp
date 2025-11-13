@@ -1,0 +1,19 @@
+tolerance 2.0
+filetype pdb
+output system.pdb
+
+structure mof.pdb
+  number 1
+  fixed 0.0 0.0 0.0 0.0 0.0 0.0
+end structure
+
+structure water.pdb
+  number 2000   # number of water molecules
+  inside box 0. 0. 0. 40. 40. 40.
+end structure
+
+structure hg_atom.pdb
+  number 10    # number of Hg atoms (or ions)
+  inside box 0. 0. 0. 40. 40. 40.
+  # optionally add distance constraints to avoid placing Hg inside framework atoms
+end structure
